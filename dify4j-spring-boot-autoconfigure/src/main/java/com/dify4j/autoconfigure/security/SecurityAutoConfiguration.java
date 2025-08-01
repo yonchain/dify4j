@@ -57,6 +57,7 @@ public class SecurityAutoConfiguration {
                 .enabledPasswordEncoderPrefix(securityProperties.isEnablePasswordEncoderPrefix())
                 .idmService(idmService)
                 .appService(appService)
+                .difySecretKey(securityProperties.getDifySecretKey())
                 .build();
     }
 

@@ -39,6 +39,7 @@ dify4j:
         permit-paths:
           - ${DIFY4J_RESOURCESERVER_PERMIT_PATHS:/api/**}  # 从环境变量读取
           - ${DIFY4J_RESOURCESERVER_PERMIT_PATHS2:/token/check_token}  # 从环境变量读取
+    dify-secret-key: sk-9f73s3ljTXVcMT3Blb3ljTqtsKiGHXVcMT3BlbkFJLK7U
 
 
 mybatis:

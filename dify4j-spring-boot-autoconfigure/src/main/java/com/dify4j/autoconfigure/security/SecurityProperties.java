@@ -35,6 +35,11 @@ public class SecurityProperties {
     private boolean enablePasswordEncoderPrefix = true;
 
     /**
+     * dify密钥
+     */
+    private String difySecretKey;
+
+    /**
      * 获取密码编码器类型
      *
      * @return 当前配置的密码编码器类型
@@ -69,5 +74,23 @@ public class SecurityProperties {
      */
     public void setEnablePasswordEncoderPrefix(boolean enablePasswordEncoderPrefix) {
         this.enablePasswordEncoderPrefix = enablePasswordEncoderPrefix;
+    }
+
+    /**
+     * 设置dify密钥
+     *
+     * @param difySecretKey dify密钥
+     */
+    public void setDifySecretKey(String difySecretKey) {
+        this.difySecretKey = difySecretKey;
+    }
+
+    /**
+     * 获取dify密钥
+     *
+     * @return dify密钥
+     */
+    public String getDifySecretKey() {
+        return difySecretKey;
     }
 }

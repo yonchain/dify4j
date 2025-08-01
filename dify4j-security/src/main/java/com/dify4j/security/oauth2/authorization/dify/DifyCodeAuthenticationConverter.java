@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 import java.util.Map;
 import java.util.HashMap;
 
-public class CustomCodeAuthenticationConverter implements AuthenticationConverter {
+public class DifyCodeAuthenticationConverter implements AuthenticationConverter {
 
     @Override
     public Authentication convert(HttpServletRequest request) {
@@ -48,7 +48,7 @@ public class CustomCodeAuthenticationConverter implements AuthenticationConverte
         Map<String, Object> additionalParameters = new HashMap<>();
         additionalParameters.put("code", code);
 
-        return new CustomCodeAuthenticationToken(code,
+        return new DifyCodeAuthenticationToken(code,
             (OAuth2ClientAuthenticationToken) clientPrincipal,
             additionalParameters
         );

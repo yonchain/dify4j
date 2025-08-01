@@ -58,11 +58,12 @@ public class DifyAuthenticationProvider implements AuthenticationProvider {
 
     public DifyAuthenticationProvider(UserDetailsService userDetailsService,
                                       OAuth2AuthorizationService authorizationService,
-                                      JwtDecoder jwtDecoder) {
+                                      JwtDecoder jwtDecoder,
+                                      String secretKey) {
         this.userDetailsService = userDetailsService;
         this.authorizationService = authorizationService;
         this.jwtDecoder = jwtDecoder;
-        tokenGenerator = new DifyJwtTokenGenerator();
+        tokenGenerator = new DifyJwtTokenGenerator(secretKey);
     }
 
 

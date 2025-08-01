@@ -8,14 +8,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-public class CustomCodeAuthenticationToken extends AbstractAuthenticationToken {
+public class DifyCodeAuthenticationToken extends AbstractAuthenticationToken {
 
     private final String code;
     private final OAuth2ClientAuthenticationToken clientPrincipal;
     private final Map<String, Object> additionalParameters;
 
     // 用于认证前的构造方法
-    public CustomCodeAuthenticationToken(
+    public DifyCodeAuthenticationToken(
             String code,
             OAuth2ClientAuthenticationToken clientPrincipal,
             Map<String, Object> additionalParameters) {
@@ -27,7 +27,7 @@ public class CustomCodeAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     // 用于认证后的构造方法
-    public CustomCodeAuthenticationToken(
+    public DifyCodeAuthenticationToken(
             String code,
             Collection<? extends GrantedAuthority> authorities) {
         super(authorities);

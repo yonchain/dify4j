@@ -112,6 +112,8 @@ public class SecurityConfiguration {
 
     protected String kid;
 
+    protected String difySecretKey;
+
     //========== Json ===========
     protected ObjectMapper objectMapper;
 
@@ -137,6 +139,7 @@ public class SecurityConfiguration {
         this.objectMapper = builder.objectMapper;
         this.idmService = builder.idmService;
         this.appService = builder.appService;
+        this.difySecretKey = builder.difySecretKey;
 
         // 初始化默认组件
         init();
@@ -226,12 +229,12 @@ public class SecurityConfiguration {
         //初始化钉钉授权模式
         dingtalkAuthenticationProvider = new OAuth2DingtalkAuthenticationProvider(
                 userDetailsService, authorizationService, tokenGenerator,
-                passwordEncoder, idmService,appService);
+                passwordEncoder, idmService, appService);
         //初始化钉钉授权模式认证转换器
         dingtalkAuthenticationConverter = new OAuth2DingtalkAuthenticationConverter();
 
         //初始化dify授权模式
-        difyAuthenticationProvider = new DifyAuthenticationProvider(userDetailsService, authorizationService, jwtDecoder);
+        difyAuthenticationProvider = new DifyAuthenticationProvider(userDetailsService, authorizationService, jwtDecoder,difySecretKey);
         //初始化dify授权模式认证转换器
         difyAuthenticationConverter = new DifyAuthenticationConverter();
     }
@@ -374,6 +377,15 @@ public class SecurityConfiguration {
     }
 
     /**
+     * 获取dify密钥
+     *
+     * @return 构建器实例
+     */
+    public String getDifySecretKey() {
+        return difySecretKey;
+    }
+
+    /**
      * 创建新的安全配置构建器
      *
      * @return 安全配置构建器
@@ -432,6 +444,8 @@ public class SecurityConfiguration {
         protected String publicKey;
 
         protected String kid;
+
+        public String difySecretKey;
 
         // Json
         protected ObjectMapper objectMapper;
@@ -666,6 +680,17 @@ public class SecurityConfiguration {
          */
         public Builder appService(AppService appService) {
             this.appService = appService;
+            return this;
+        }
+
+        /**
+         * 设置钉钉密钥
+         *
+         * @param difySecretKey 钉钉密钥
+         * @return 构建器实例
+         */
+        public Builder difySecretKey(String difySecretKey) {
+            this.difySecretKey = difySecretKey;
             return this;
         }
 

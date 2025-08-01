@@ -1,10 +1,8 @@
 package com.dify4j.security.oauth2.authorization.dify;
 
-import com.dify4j.security.oauth2.authorization.OAuth2AuthorizationGrantTypes;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
@@ -17,28 +15,28 @@ import org.springframework.security.oauth2.server.authorization.authentication.O
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.util.StringUtils;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ERROR_URI;
 
-public class CustomCodeAuthenticationProvider implements AuthenticationProvider {
+public class DifyCodeAuthenticationProvider implements AuthenticationProvider {
 
     private final UserDetailsService userDetailsService;
     private final OAuth2AuthorizationService authorizationService;
     private final DifyJwtTokenGenerator tokenGenerator;
 
-    public CustomCodeAuthenticationProvider(OAuth2AuthorizationService authorizationService,
-                                            UserDetailsService userDetailsService) {
+    public DifyCodeAuthenticationProvider(OAuth2AuthorizationService authorizationService,
+                                          UserDetailsService userDetailsService,
+                                          String secretKey) {
         this.authorizationService = authorizationService;
         this.userDetailsService = userDetailsService;
-        tokenGenerator = new DifyJwtTokenGenerator();
+        tokenGenerator = new DifyJwtTokenGenerator(secretKey);
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        CustomCodeAuthenticationToken codeAuthenticationToken = (CustomCodeAuthenticationToken) authentication;
+        DifyCodeAuthenticationToken codeAuthenticationToken = (DifyCodeAuthenticationToken) authentication;
 
         // 获取OAuth2客户端认证信息
         OAuth2ClientAuthenticationToken clientPrincipal =
@@ -121,7 +119,7 @@ public class CustomCodeAuthenticationProvider implements AuthenticationProvider 
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return CustomCodeAuthenticationToken.class.isAssignableFrom(authentication);
+        return DifyCodeAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
     public static OAuth2ClientAuthenticationToken getAuthenticatedClientElseThrowInvalidClient(Authentication authentication) {

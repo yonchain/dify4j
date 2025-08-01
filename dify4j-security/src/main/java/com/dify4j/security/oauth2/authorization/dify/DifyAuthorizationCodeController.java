@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationCode;
@@ -31,16 +30,16 @@ import java.util.*;
  * 不需要用户认证，直接生成授权码
  */
 @RestController
-public class CustomAuthorizationCodeController {
+public class DifyAuthorizationCodeController {
 
     private final OAuth2AuthorizationService authorizationService;
     private final RegisteredClientRepository registeredClientRepository;
     private final SecureRandom secureRandom;
     private final SecurityService securityService;
 
-    public CustomAuthorizationCodeController(OAuth2AuthorizationService authorizationService,
-                                             RegisteredClientRepository registeredClientRepository,
-                                             SecurityService securityService) {
+    public DifyAuthorizationCodeController(OAuth2AuthorizationService authorizationService,
+                                           RegisteredClientRepository registeredClientRepository,
+                                           SecurityService securityService) {
         this.authorizationService = authorizationService;
         this.registeredClientRepository = registeredClientRepository;
         this.secureRandom = new SecureRandom();
@@ -74,28 +73,6 @@ public class CustomAuthorizationCodeController {
     }
 
     private ResponseEntity<?> authorize(String clientId, String redirectUri, String scope, String state, String responseType) {
-
-        // 检查用户是否已认证
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      /*  if (authentication == null || !authentication.isAuthenticated() ||
-                "anonymousUser".equals(authentication.getPrincipal())) {
-
-            // 保存当前请求参数到session
-            HttpSession session = request.getSession(true);
-            Map<String, String> authParams = new HashMap<>();
-            authParams.put("client_id", clientId);
-            authParams.put("redirect_uri", redirectUri);
-            authParams.put("response_type", responseType);
-            if (scope != null) authParams.put("scope", scope);
-            if (state != null) authParams.put("state", state);
-
-            session.setAttribute("oauth2_auth_request", authParams);
-
-            // 重定向到登录页面
-            response.sendRedirect("/login?continue=/custom/oauth2/continue-authorize");
-            return null;
-        }
-*/
         try {
             // 1. 验证客户端
             RegisteredClient registeredClient = registeredClientRepository.findByClientId(clientId);
