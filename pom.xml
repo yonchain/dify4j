@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- <parent>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-parent</artifactId>
+         <version>3.5.0</version>
+         <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;
+     </parent>-->
+
+    <groupId>com.dify4j</groupId>
+    <artifactId>dify4j-parent</artifactId>
+    <version>0.1.0</version>
+
+    <packaging>pom</packaging>
+    <name>dify4j</name>
+    <description>dify4j是dify的java版本</description>
+
+    <modules>
+        <module>dify4j-bom</module>
+        <module>dify4j-commons</module>
+        <module>dify4j-console</module>
+        <module>dify4j-spring-boot-starters</module>
+        <module>dify4j-model</module>
+        <module>dify4j-workflow</module>
+        <module>dify4j-rag</module>
+        <module>dify4j-bootstrap</module>
+        <module>dify4j-idm</module>
+        <module>dify4j-client</module>
+        <module>dify4j-core</module>
+        <module>dify4j-security</module>
+        <module>dify4j-api</module>
+        <module>dify4j-app</module>
+        <module>dify4j-spring-boot-autoconfigure</module>
+    </modules>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <!-- dify4j版本 -->
+        <revision>0.0.1</revision>
+
+        <!-- Spring相关版本 -->
+        <spring-boot.version>3.5.0</spring-boot.version>
+        <spring-ai.version>1.0.0</spring-ai.version>
+
+        <!-- plugin versions -->
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+
+        <!--数据库-->
+        <postgresql.version>42.7.5</postgresql.version>
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
+
+        <!--工具-->
+        <fastjson2.version>2.0.55</fastjson2.version>
+        <springdoc.version>2.8.9</springdoc.version>
+        <lombok.version>1.18.26</lombok.version>
+        <dingtalk.version>2.2.29</dingtalk.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--Spring Boot-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--Spring AI-->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--Dify4j-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-bom</artifactId>
+                <version>0.1.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- OpenAPI 3 -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-bom</artifactId>
+                <version>${springdoc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+        </repository>
+
+        <!--Maven中央仓库-->
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!--阿里云仓库-->
+        <repository>
+            <id>aliyun</id>
+            <name>Aliyun Maven</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

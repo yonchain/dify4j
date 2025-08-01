@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dify4j.model.mapper.TenantDefaultModelMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.dify4j.model.entity.TenantDefaultModelEntity">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="tenant_id" property="tenantId" jdbcType="VARCHAR"/>
+        <result column="provider_name" property="providerName" jdbcType="VARCHAR"/>
+        <result column="model_name" property="modelName" jdbcType="VARCHAR"/>
+        <result column="model_type" property="modelType" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, tenant_id, provider_name, model_name, model_type, created_at, updated_at
+    </sql>
+
+
+
+    <!-- 查询默认模型 -->
+    <select id="selectOne" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM default_models
+        WHERE tenant_id = #{tenantId}::uuid AND
+              model_type = #{modelType}
+    </select>
+
+    <!-- 查询默认模型列表 -->
+    <select id="selectListByTenantId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM default_models
+        <where>
+            tenant_id = #{tenantId}::uuid
+        </where>
+        ORDER BY created_at DESC
+    </select>
+
+
+    <!-- 批量保存默认模型 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO default_models (
+        id, tenant_id, provider_name, model_name, model_type, created_at, updated_at
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}::uuid, #{item.tenantId}::uuid, #{item.providerName},
+            #{item.modelName}, #{item.modelType}, #{item.createdAt}, #{item.updatedAt}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 根据租户ID删除默认模型 -->
+    <delete id="deleteByTenantId">
+        DELETE FROM default_models
+        WHERE tenant_id = #{tenantId}::uuid
+    </delete>
+
+</mapper>

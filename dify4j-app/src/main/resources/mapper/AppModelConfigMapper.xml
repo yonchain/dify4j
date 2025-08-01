@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dify4j.app.mapper.AppModelConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dify4j.app.entity.AppModelConfigEntity">
+        <id column="id" property="id" jdbcType="OTHER"/>
+        <result column="app_id" property="appId" jdbcType="OTHER"/>
+        <result column="provider" property="provider"/>
+        <result column="model_id" property="modelId" jdbcType="OTHER"/>
+        <result column="configs" property="configs"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="opening_statement" property="openingStatement"/>
+        <result column="suggested_questions" property="suggestedQuestions"/>
+        <result column="suggested_questions_after_answer" property="suggestedQuestionsAfterAnswer"/>
+        <result column="more_like_this" property="moreLikeThis"/>
+        <result column="model" property="model"/>
+        <result column="user_input_form" property="userInputForm"/>
+        <result column="pre_prompt" property="prePrompt"/>
+        <result column="agent_mode" property="agentMode"/>
+        <result column="speech_to_text" property="speechToText"/>
+        <result column="sensitive_word_avoidance" property="sensitiveWordAvoidance"/>
+        <result column="retriever_resource" property="retrieverResource"/>
+        <result column="dataset_query_variable" property="datasetQueryVariable"/>
+        <result column="prompt_type" property="promptType"/>
+        <result column="chat_prompt_config" property="chatPromptConfig"/>
+        <result column="completion_prompt_config" property="completionPromptConfig"/>
+        <result column="dataset_configs" property="datasetConfigs"/>
+        <result column="external_data_tools" property="externalDataTools"/>
+        <result column="file_upload" property="fileUpload"/>
+        <result column="text_to_speech" property="textToSpeech"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, app_id, provider, model_id, configs, created_at, updated_at, opening_statement,
+        suggested_questions, suggested_questions_after_answer, more_like_this, model,
+        user_input_form, pre_prompt, agent_mode, speech_to_text, sensitive_word_avoidance,
+        retriever_resource, dataset_query_variable, prompt_type, chat_prompt_config,
+        completion_prompt_config, dataset_configs, external_data_tools, file_upload,
+        text_to_speech, created_by, updated_by
+    </sql>
+
+    <!-- 根据ID查询应用模型配置 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM app_model_configs
+        WHERE id = #{id}::uuid
+    </select>
+
+    <!-- 根据应用ID查询应用模型配置 -->
+    <select id="selectByAppId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM app_model_configs
+        WHERE app_id = #{appId}::uuid
+    </select>
+
+    <!-- 查询所有应用模型配置 -->
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM app_model_configs
+        <where>
+            <if test="appId != null">
+                AND app_id = #{appId}::uuid
+            </if>
+            <if test="provider != null and provider != ''">
+                AND provider = #{provider}
+            </if>
+            <if test="modelId != null and modelId != ''">
+                AND model_id = #{modelId}::uuid
+            </if>
+            <if test="promptType != null and promptType != ''">
+                AND prompt_type = #{promptType}
+            </if>
+        </where>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 插入应用模型配置 -->
+    <insert id="insert" parameterType="com.dify4j.app.entity.AppModelConfigEntity">
+        INSERT INTO app_model_configs (
+            id, app_id, provider, model_id, configs, created_at, updated_at, opening_statement,
+            suggested_questions, suggested_questions_after_answer, more_like_this, model,
+            user_input_form, pre_prompt, agent_mode, speech_to_text, sensitive_word_avoidance,
+            retriever_resource, dataset_query_variable, prompt_type, chat_prompt_config,
+            completion_prompt_config, dataset_configs, external_data_tools, file_upload,
+            text_to_speech, created_by, updated_by
+        ) VALUES (
+            #{id}::uuid, #{appId}::uuid, #{provider}, #{modelId}::uuid, #{configs},
+            #{createdAt}, #{updatedAt}, #{openingStatement}, #{suggestedQuestions},
+            #{suggestedQuestionsAfterAnswer}, #{moreLikeThis}, #{model}, #{userInputForm},
+            #{prePrompt}, #{agentMode}, #{speechToText}, #{sensitiveWordAvoidance},
+            #{retrieverResource}, #{datasetQueryVariable}, #{promptType}, #{chatPromptConfig},
+            #{completionPromptConfig}, #{datasetConfigs}, #{externalDataTools}, #{fileUpload},
+            #{textToSpeech}, #{createdBy}, #{updatedBy}
+        )
+    </insert>
+
+    <!-- 更新应用模型配置 -->
+    <update id="updateById" parameterType="com.dify4j.app.entity.AppModelConfigEntity">
+        UPDATE app_model_configs
+        <set>
+            <if test="appId != null">app_id = #{appId}::uuid,</if>
+            <if test="provider != null">provider = #{provider},</if>
+            <if test="modelId != null">model_id = #{modelId}::uuid,</if>
+            <if test="configs != null">configs = #{configs},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="openingStatement != null">opening_statement = #{openingStatement},</if>
+            <if test="suggestedQuestions != null">suggested_questions = #{suggestedQuestions},</if>
+            <if test="suggestedQuestionsAfterAnswer != null">suggested_questions_after_answer = #{suggestedQuestionsAfterAnswer},</if>
+            <if test="moreLikeThis != null">more_like_this = #{moreLikeThis},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="userInputForm != null">user_input_form = #{userInputForm},</if>
+            <if test="prePrompt != null">pre_prompt = #{prePrompt},</if>
+            <if test="agentMode != null">agent_mode = #{agentMode},</if>
+            <if test="speechToText != null">speech_to_text = #{speechToText},</if>
+            <if test="sensitiveWordAvoidance != null">sensitive_word_avoidance = #{sensitiveWordAvoidance},</if>
+            <if test="retrieverResource != null">retriever_resource = #{retrieverResource},</if>
+            <if test="datasetQueryVariable != null">dataset_query_variable = #{datasetQueryVariable},</if>
+            <if test="promptType != null">prompt_type = #{promptType},</if>
+            <if test="chatPromptConfig != null">chat_prompt_config = #{chatPromptConfig},</if>
+            <if test="completionPromptConfig != null">completion_prompt_config = #{completionPromptConfig},</if>
+            <if test="datasetConfigs != null">dataset_configs = #{datasetConfigs},</if>
+            <if test="externalDataTools != null">external_data_tools = #{externalDataTools},</if>
+            <if test="fileUpload != null">file_upload = #{fileUpload},</if>
+            <if test="textToSpeech != null">text_to_speech = #{textToSpeech},</if>
+            <if test="updatedBy != null">updated_by = #{updatedBy}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除应用模型配置 -->
+    <delete id="deleteById">
+        DELETE FROM app_model_configs WHERE id = #{id}::uuid
+    </delete>
+
+    <!-- 根据应用ID删除应用模型配置 -->
+    <delete id="deleteByAppId">
+        DELETE FROM app_model_configs WHERE app_id = #{appId}::uuid
+    </delete>
+
+    <!-- 批量删除应用模型配置 -->
+    <delete id="deleteBatchIds">
+        DELETE FROM app_model_configs WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}::uuid
+        </foreach>
+    </delete>
+
+</mapper>

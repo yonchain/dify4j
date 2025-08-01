@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dify4j.workflow.mapper.WorkflowMapper">
+    <!-- 结果映射 -->
+    <resultMap id="workflowResultMap" type="com.dify4j.workflow.entity.WorkflowEntity">
+        <!-- 工作流唯一标识符 -->
+        <id column="id" property="id" jdbcType="OTHER" />
+        <!-- 租户ID，标识工作流所属的租户 -->
+        <result column="tenant_id" property="tenantId" jdbcType="OTHER" />
+        <!-- 应用ID，标识工作流所属的应用 -->
+        <result column="app_id" property="appId" jdbcType="OTHER" />
+        <!-- 工作流类型，如对话流、自动化流等 -->
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <!-- 工作流版本号，用于版本控制 -->
+        <result column="version" property="version" jdbcType="VARCHAR" />
+        <!-- 工作流图形定义，存储工作流节点和连接的JSON结构 -->
+        <result column="graph" property="graph" jdbcType="VARCHAR" />
+        <!-- 工作流特性配置，存储工作流额外功能的JSON结构 -->
+        <result column="features" property="features" jdbcType="VARCHAR" />
+        <!-- 创建者ID，记录创建工作流的用户 -->
+        <result column="created_by" property="createdBy" jdbcType="OTHER" />
+        <!-- 创建时间，记录工作流创建的时间戳 -->
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+        <!-- 更新者ID，记录最后更新工作流的用户 -->
+        <result column="updated_by" property="updatedBy" jdbcType="OTHER" />
+        <!-- 更新时间，记录工作流最后更新的时间戳 -->
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+        <!-- 环境变量，存储工作流可用的环境变量JSON结构 -->
+        <result column="environment_variables" property="environmentVariables" jdbcType="VARCHAR" />
+        <!-- 会话变量，存储工作流会话中可用的变量JSON结构 -->
+        <result column="conversation_variables" property="conversationVariables" jdbcType="VARCHAR" />
+        <!-- 标记名称，用于工作流的自定义标记或标签 -->
+        <result column="marked_name" property="markedName" jdbcType="VARCHAR" />
+        <!-- 标记注释，用于工作流的附加说明或备注 -->
+        <result column="marked_comment" property="markedComment" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!-- 公共列 -->
+    <sql id="Base_Column_List">
+        id, tenant_id, app_id, type, version, graph, features, created_by, created_at,
+        updated_by, updated_at, environment_variables, conversation_variables, marked_name, marked_comment
+    </sql>
+
+    <!-- 根据ID查询工作流 -->
+    <select id="selectById" resultMap="workflowResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM workflows
+        WHERE id = #{id}::uuid
+    </select>
+
+    <!-- 根据租户ID查询工作流列表 -->
+    <select id="selectList" resultMap="workflowResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM workflows
+        WHERE tenant_id = #{tenantId}::uuid
+        <if test="params != null">
+            <if test="params.appId != null">
+                AND app_id = #{params.appId}::uuid
+            </if>
+            <if test="params.type != null">
+                AND type = #{params.type}
+            </if>
+            <if test="params.version != null">
+                AND version = #{params.version}
+            </if>
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 插入工作流记录 -->
+    <insert id="insert">
+        INSERT INTO workflows (
+            id, tenant_id, app_id, type, version, graph, features, created_by, created_at,
+            updated_by, updated_at, environment_variables, conversation_variables, marked_name, marked_comment
+        ) VALUES (
+            #{id}::uuid, #{tenantId}::uuid, #{appId}::uuid, #{type}, #{version}, #{graph}, #{features},
+            #{createdBy}::uuid, #{createdAt}, #{updatedBy}::uuid, #{updatedAt},
+            #{environmentVariables}, #{conversationVariables}, #{markedName}, #{markedComment}
+        )
+    </insert>
+
+    <!-- 根据ID更新工作流 -->
+    <update id="updateById">
+        UPDATE workflows
+        <set>
+            <if test="type != null">type = #{type},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="graph != null">graph = #{graph},</if>
+            <if test="features != null">features = #{features},</if>
+            <if test="updatedBy != null">updated_by = #{updatedBy}::uuid,</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="environmentVariables != null">environment_variables = #{environmentVariables},</if>
+            <if test="conversationVariables != null">conversation_variables = #{conversationVariables},</if>
+            <if test="markedName != null">marked_name = #{markedName},</if>
+            <if test="markedComment != null">marked_comment = #{markedComment},</if>
+        </set>
+        WHERE id = #{id}::uuid
+    </update>
+
+    <!-- 根据ID删除工作流 -->
+    <delete id="deleteById">
+        DELETE FROM workflows
+        WHERE id = #{id}::uuid
+    </delete>
+
+    <!-- 根据应用ID删除工作流 -->
+    <delete id="deleteByAppId">
+        DELETE FROM workflows
+        WHERE app_id = #{appId}::uuid
+    </delete>
+</mapper>

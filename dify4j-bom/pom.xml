@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.dify4j</groupId>
+    <artifactId>dify4j-bom</artifactId>
+    <version>0.1.0</version>
+
+    <packaging>pom</packaging>
+    <description>dify4j依赖定义模块</description>
+
+    <properties>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--dify4j API模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--dify4j通用模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--dify4j控制台模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-console</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--dify4j身份模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-idm</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--dify4j客户端模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--mybatis模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-starter-mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--安全模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--检索增强生成(知识库)模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-rag</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--应用模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--模型模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--大模型模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-server-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--工作流模块模块-->
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-workflow</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-security-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-idm-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-starter-swagger</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dify4j</groupId>
+                <artifactId>dify4j-starter-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

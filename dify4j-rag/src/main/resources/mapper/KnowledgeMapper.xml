@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dify4j.rag.mapper.KnowledgeMapper">
+
+    <!-- 知识库实体映射 -->
+    <resultMap id="BaseResultMap" type="com.dify4j.rag.entity.KnowledgeEntity">
+        <!-- 主键ID -->
+        <id column="id" property="id"/>
+        <!-- 租户ID -->
+        <result column="tenant_id" property="tenantId"/>
+        <!-- 知识库名称 -->
+        <result column="name" property="name"/>
+        <!-- 知识库描述 -->
+        <result column="description" property="description"/>
+        <!-- 提供者（vendor等） -->
+        <result column="provider" property="provider"/>
+        <!-- 权限（only_me等） -->
+        <result column="permission" property="permission"/>
+        <!-- 数据源类型 -->
+        <result column="data_source_type" property="dataSourceType"/>
+        <!-- 索引技术 -->
+        <result column="indexing_technique" property="indexingTechnique"/>
+        <!-- 索引结构 -->
+        <result column="index_struct" property="indexStruct"/>
+        <!-- 创建人 -->
+        <result column="created_by" property="createdBy"/>
+        <!-- 创建时间 -->
+        <result column="created_at" property="createdAt"/>
+        <!-- 更新人 -->
+        <result column="updated_by" property="updatedBy"/>
+        <!-- 更新时间 -->
+        <result column="updated_at" property="updatedAt"/>
+        <!-- 嵌入模型（如text-embedding-ada-002） -->
+        <result column="embedding_model" property="embeddingModel"/>
+        <!-- 嵌入模型提供者（如openai） -->
+        <result column="embedding_model_provider" property="embeddingModelProvider"/>
+        <!-- 集合绑定ID -->
+        <result column="collection_binding_id" property="collectionBindingId"/>
+        <!-- 检索模型配置（JSON格式） -->
+        <result column="retrieval_model" property="retrievalModel"/>
+        <!-- 是否启用内置字段 -->
+        <result column="built_in_field_enabled" property="builtInFieldEnabled"/>
+    </resultMap>
+
+    <!-- 所有列 -->
+    <sql id="Base_Column_List">
+        id, tenant_id, name, description, provider, permission, data_source_type,
+        indexing_technique, index_struct, created_by, created_at, updated_by, updated_at,
+        embedding_model, embedding_model_provider, collection_binding_id, retrieval_model,
+        built_in_field_enabled
+    </sql>
+
+    <!-- 根据ID查询知识库 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM datasets
+        WHERE id = #{id}::uuid
+    </select>
+
+    <!-- 根据条件查询知识库列表 -->
+    <select id="selectList"  resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM datasets
+        <where>
+            tenant_id = #{tenantId}::uuid
+            <if test="params.keyword != null">AND name LIKE CONCAT('%', #{params.keyword}, '%')</if>
+        </where>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 检查知识库名称是否存在 -->
+    <select id="checkNameExists" resultType="int">
+        SELECT COUNT(1)
+        FROM datasets
+        WHERE tenant_id = #{tenantId}::uuid
+        AND name = #{name}
+        <if test="excludeId != null">
+            AND id != #{excludeId}::uuid
+        </if>
+    </select>
+
+    <!-- 插入知识库记录 -->
+    <insert id="insert" parameterType="com.dify4j.rag.entity.KnowledgeEntity">
+        INSERT INTO datasets (
+            id, tenant_id, name, description, provider, permission, data_source_type,
+            indexing_technique, index_struct, created_by, created_at, updated_by, updated_at,
+            embedding_model, embedding_model_provider, collection_binding_id, retrieval_model,
+            built_in_field_enabled
+        ) VALUES (
+            #{id}::uuid, #{tenantId}::uuid, #{name}, #{description}, #{provider}, #{permission}, #{dataSourceType},
+            #{indexingTechnique}, #{indexStruct}, #{createdBy}::uuid, #{createdAt}, #{updatedBy}::uuid, #{updatedAt},
+            #{embeddingModel}, #{embeddingModelProvider}, #{collectionBindingId}::uuid, #{retrievalModel}::jsonb,
+            #{builtInFieldEnabled}
+        )
+    </insert>
+
+    <!-- 更新知识库记录 -->
+    <update id="update" parameterType="com.dify4j.rag.entity.KnowledgeEntity">
+        UPDATE datasets
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="provider != null">provider = #{provider},</if>
+            <if test="permission != null">permission = #{permission},</if>
+            <if test="dataSourceType != null">data_source_type = #{dataSourceType},</if>
+            <if test="indexingTechnique != null">indexing_technique = #{indexingTechnique},</if>
+            <if test="indexStruct != null">index_struct = #{indexStruct},</if>
+            <if test="updatedBy != null">updated_by = #{updatedBy}::uuid,</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="embeddingModel != null">embedding_model = #{embeddingModel},</if>
+            <if test="embeddingModelProvider != null">embedding_model_provider = #{embeddingModelProvider},</if>
+            <if test="collectionBindingId != null">collection_binding_id = #{collectionBindingId}::uuid,</if>
+            <if test="retrievalModel != null">retrieval_model = #{retrievalModel}::jsonb,</if>
+            <if test="builtInFieldEnabled != null">built_in_field_enabled = #{builtInFieldEnabled}</if>
+        </set>
+        WHERE id = #{id}::uuid AND tenant_id = #{tenantId}::uuid
+    </update>
+
+    <!-- 根据ID删除知识库 -->
+    <delete id="deleteById">
+        DELETE FROM datasets WHERE id = #{id}::uuid
+    </delete>
+
+    <!-- 批量删除知识库 -->
+    <delete id="deleteByIds">
+        DELETE FROM datasets WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}::uuid
+        </foreach>
+    </delete>
+
+</mapper>

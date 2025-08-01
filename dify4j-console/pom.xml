@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.dify4j</groupId>
+        <artifactId>dify4j-parent</artifactId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>dify4j-console</artifactId>
+    <description>api模块，包括控制台接口和开放接口</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--dify4j API模块-->
+        <dependency>
+            <groupId>com.dify4j</groupId>
+            <artifactId>dify4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dify4j</groupId>
+            <artifactId>dify4j-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dify4j</groupId>
+            <artifactId>dify4j-starter-swagger</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dify4j</groupId>
+            <artifactId>dify4j-starter-mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dify4j</groupId>
+            <artifactId>dify4j-workflow</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dify4j</groupId>
+            <artifactId>dify4j-starter-redis</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

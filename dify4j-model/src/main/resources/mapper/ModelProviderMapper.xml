@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-org//DTD//mybatis. Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dify4j.model.mapper.ModelProviderMapper">
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.dify4j.model.entity.ModelProviderEntity">
+        <!-- 主键ID，使用UUID类型 -->
+        <id column="id" property="id" jdbcType="OTHER" />
+        <!-- 租户ID -->
+        <result column="tenant_id" property="tenantId" jdbcType="OTHER" />
+        <!-- 提供商名称 -->
+        <result column="provider_name" property="providerName" jdbcType="VARCHAR" />
+        <!-- 提供商类型 -->
+        <result column="provider_type" property="providerType" jdbcType="VARCHAR" />
+        <!-- 加密配置 -->
+        <result column="encrypted_config" property="encryptedConfig" jdbcType="VARCHAR" />
+        <!-- 是否有效 -->
+        <result column="is_valid" property="isValid" jdbcType="BOOLEAN" />
+        <!-- 最后使用时间 -->
+        <result column="last_used" property="lastUsed" jdbcType="TIMESTAMP" />
+        <!-- 配额类型 -->
+        <result column="quota_type" property="quotaType" jdbcType="VARCHAR" />
+        <!-- 配额限制 -->
+        <result column="quota_limit" property="quotaLimit" jdbcType="BIGINT" />
+        <!-- 已用配额 -->
+        <result column="quota_used" property="quotaUsed" jdbcType="BIGINT" />
+        <!-- 创建时间 -->
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+        <!-- 更新时间 -->
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, tenant_id, provider_name, provider_type, encrypted_config, is_valid,
+        last_used, quota_type, quota_limit, quota_used, created_at, updated_at
+    </sql>
+
+    <!-- 根据ID查询模型提供商 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM providers
+        WHERE id = #{id}::uuid
+    </select>
+
+    <!-- 分页查询模型提供商 -->
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM providers
+        WHERE tenant_id = #{tenantId}::uuid
+        <if test="params != null">
+            <if test="params.providerName != null and params.providerName != ''">
+                AND provider_name LIKE CONCAT('%', #{params.providerName}, '%')
+            </if>
+            <if test="params.providerType != null and params.providerType != ''">
+                AND provider_type = #{params.providerType}
+            </if>
+            <if test="params.isValid != null">
+                AND is_valid = #{params.isValid}
+            </if>
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 插入模型提供商 -->
+    <insert id="insert">
+        INSERT INTO providers (
+            id, tenant_id, provider_name, provider_type, encrypted_config, is_valid,
+            last_used, quota_type, quota_limit, quota_used, created_at, updated_at
+        )
+        VALUES (
+            #{id}::uuid, #{tenantId}::uuid, #{providerName}, #{providerType}, #{encryptedConfig},
+            #{isValid}, #{lastUsed}, #{quotaType}, #{quotaLimit}, #{quotaUsed}, #{createdAt}, #{updatedAt}
+        )
+    </insert>
+
+    <!-- 更新模型提供商 -->
+    <update id="update">
+        UPDATE providers
+        SET provider_name = #{providerName},
+            provider_type = #{providerType},
+            encrypted_config = #{encryptedConfig},
+            is_valid = #{isValid},
+            last_used = #{lastUsed},
+            quota_type = #{quotaType},
+            quota_limit = #{quotaLimit},
+            quota_used = #{quotaUsed},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}::uuid
+    </update>
+
+    <!-- 删除模型提供商 -->
+    <delete id="deleteById">
+        DELETE FROM providers
+        WHERE id = #{id}::uuid
+    </delete>
+
+    <!-- 批量删除模型提供商 -->
+    <delete id="batchDelete">
+        DELETE FROM providers
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}::uuid
+        </foreach>
+    </delete>
+
+    <!-- 根据提供商名称查询模型提供商 -->
+    <select id="selectByProviderName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM providers
+        WHERE tenant_id = #{tenantId}::uuid
+        AND provider_name = #{providerName}
+    </select>
+
+    <!-- 根据提供商类型查询模型提供商 -->
+    <select id="selectByProviderType" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM providers
+        WHERE tenant_id = #{tenantId}::uuid
+        AND provider_type = #{providerType}
+    </select>
+
+    <!-- 更新配额使用情况 -->
+    <update id="updateQuotaUsage">
+        UPDATE providers
+        SET quota_used = #{quotaUsed},
+            last_used = #{lastUsed},
+            updated_at = NOW()
+        WHERE id = #{id}::uuid
+    </update>
+
+</mapper>

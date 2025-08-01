@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.dify4j</groupId>
+        <artifactId>dify4j-parent</artifactId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>dify4j-commons</artifactId>
+    <description>通用模块</description>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dify4j</groupId>
+            <artifactId>dify4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dify4j</groupId>
+            <artifactId>dify4j-starter-mybatis</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Spring Framework 6.2 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Jakarta Servlet API -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+</project>

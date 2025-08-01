@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dify4j.model.mapper.ModelMapper">
+    <!-- 模型结果映射 -->
+    <resultMap id="ModelResultMap" type="com.dify4j.model.entity.ModelEntity">
+        <!-- 主键ID -->
+        <id column="id" property="id" jdbcType="OTHER"/>
+        <!-- 租户ID -->
+        <result column="tenant_id" property="tenantId" jdbcType="OTHER"/>
+        <!-- 提供商名称 -->
+        <result column="provider_name" property="providerName" jdbcType="VARCHAR"/>
+        <!-- 模型名称 -->
+        <result column="model_name" property="modelName" jdbcType="VARCHAR"/>
+        <!-- 模型类型 -->
+        <result column="model_type" property="modelType" jdbcType="VARCHAR"/>
+        <!-- 加密配置 -->
+        <result column="encrypted_config" property="encryptedConfig" jdbcType="VARCHAR"/>
+        <!-- 是否有效 -->
+        <result column="is_valid" property="isValid" jdbcType="BOOLEAN"/>
+        <!-- 创建时间 -->
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <!-- 更新时间 -->
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, tenant_id, provider_name, model_name, model_type, encrypted_config, is_valid, created_at, updated_at
+    </sql>
+
+    <!-- 根据ID查询模型 -->
+    <select id="selectById" resultMap="ModelResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM provider_models
+        WHERE id = #{id}::uuid
+    </select>
+
+    <!-- 根据租户ID查询模型列表 -->
+    <select id="selectList" resultMap="ModelResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM provider_models
+        WHERE tenant_id = #{tenantId}::uuid
+        <if test="params.modelType != null">AND model_type = #{params.modelType}</if>
+        <if test="params.modelName != null">AND model_name = #{params.modelName}</if>
+        <if test="params.isValid != null">AND is_valid = #{params.isValid}</if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 插入模型 -->
+    <insert id="insert" parameterType="com.dify4j.model.entity.ModelEntity">
+        INSERT INTO provider_models (
+            id, tenant_id, provider_name, model_name, model_type, encrypted_config, is_valid, created_at, updated_at
+        ) VALUES (
+            #{id}::uuid, #{tenantId}::uuid, #{providerName}, #{modelName}, #{modelType},
+            #{encryptedConfig}, #{isValid}, #{createdAt}, #{updatedAt}
+        )
+    </insert>
+
+    <!-- 更新模型 -->
+    <update id="update" parameterType="com.dify4j.model.entity.ModelEntity">
+        UPDATE provider_models
+        <set>
+            <if test="providerName != null">provider_name = #{providerName},</if>
+            <if test="modelName != null">model_name = #{modelName},</if>
+            <if test="modelType != null">model_type = #{modelType},</if>
+            <if test="encryptedConfig != null">encrypted_config = #{encryptedConfig},</if>
+            <if test="isValid != null">is_valid = #{isValid},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </set>
+        WHERE id = #{id}::uuid
+    </update>
+
+    <!-- 删除模型 -->
+    <delete id="deleteById">
+        DELETE FROM provider_models WHERE id = #{id}::uuid
+    </delete>
+
+</mapper>

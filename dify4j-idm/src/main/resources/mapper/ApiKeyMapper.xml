@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dify4j.idm.mapper.ApiKeyMapper">
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.dify4j.idm.entity.ApiKeyEntity">
+        <!-- 主键ID，使用UUID类型 -->
+        <id column="id" property="id" jdbcType="OTHER" />
+        <!-- 应用ID，不可为空 -->
+        <result column="app_id" property="appId" jdbcType="OTHER" />
+        <!-- 密钥类型，不可为空 -->
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <!-- 密钥令牌，不可为空 -->
+        <result column="token" property="token" jdbcType="VARCHAR" />
+        <!-- 最后使用时间，可为空 -->
+        <result column="last_used_at" property="lastUsedAt" jdbcType="TIMESTAMP" />
+        <!-- 创建时间，不可为空，默认为当前时间戳 -->
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+        <!-- 租户ID，可为空 -->
+        <result column="tenant_id" property="tenantId" jdbcType="OTHER" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, app_id, type, token, last_used_at, created_at, tenant_id
+    </sql>
+
+    <!-- 查询API密钥列表 -->
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM api_keys
+        WHERE type = #{type}
+        <if test="tenantId != null and tenantId != ''">
+            AND tenant_id = #{tenantId}::uuid
+        </if>
+        <if test="params.appId != null and params.appId != ''">
+            AND app_id = #{params.appId}::uuid
+        </if>
+    </select>
+
+    <!-- 插入API密钥记录 -->
+    <insert id="insert" parameterType="com.dify4j.idm.entity.ApiKeyEntity">
+        INSERT INTO api_keys (
+            app_id, type, token, tenant_id
+        )
+        VALUES (
+            #{appId}::uuid, #{type}, #{token}, #{tenantId}
+        )
+    </insert>
+
+
+    <!-- 根据ID删除API密钥 -->
+    <delete id="deleteById">
+        DELETE FROM api_keys
+        WHERE id = #{id}::uuid
+    </delete>
+
+</mapper>
