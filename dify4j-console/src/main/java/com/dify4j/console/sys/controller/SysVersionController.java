@@ -1,4 +1,4 @@
-package com.dify4j.console.sys;
+package com.dify4j.console.sys.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;

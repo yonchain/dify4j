@@ -1,8 +1,11 @@
 package com.dify4j.security.oauth2.authorization;
 
+import com.dify4j.api.security.Password;
+import com.dify4j.api.security.SecurityEventPublisher;
 import com.dify4j.security.user.Dify4jUser;
 import com.dify4j.security.crypto.PasswordUtil;
 import com.dify4j.security.crypto.PasswordEncoderType;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -20,6 +23,9 @@ import org.springframework.security.oauth2.server.authorization.context.Authoriz
 import org.springframework.security.oauth2.server.authorization.token.DefaultOAuth2TokenContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.security.Principal;
 import java.util.*;
@@ -170,6 +176,10 @@ public class OAuth2PasswordAuthenticationProvider implements AuthenticationProvi
             additionalParameters.put(OAuth2ParameterNames.REFRESH_TOKEN, refreshToken.getTokenValue());
         }
 
+
+        // 发布用户登录事件
+       SecurityEventPublisher.publishUserLoginEvent(userDetails.getUserId(),this.getClientIp());
+        
         // 返回访问令牌认证结果
         return new OAuth2AccessTokenAuthenticationToken(registeredClient, clientPrincipal, accessToken, refreshToken, additionalParameters);
     }
@@ -233,5 +243,24 @@ public class OAuth2PasswordAuthenticationProvider implements AuthenticationProvi
      */
     public void setEnabledPasswordEncoderPrefix(boolean enabledPasswordEncoderPrefix) {
         this.enabledPasswordEncoderPrefix = enabledPasswordEncoderPrefix;
+    }
+
+    /**
+     * 获取客户端IP地址
+     */
+    private String getClientIp() {
+        String UNKNOWN_IP = "unknown";
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String ip = request.getHeader("X-Forwarded-For");
+        if (!StringUtils.hasText(ip) || UNKNOWN_IP.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (!StringUtils.hasText(ip) || UNKNOWN_IP.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (!StringUtils.hasText(ip) || UNKNOWN_IP.equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 }
