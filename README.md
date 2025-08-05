@@ -244,6 +244,21 @@ chmod -R 777 *
 
 API 文档使用 SpringDoc 生成，可以通过访问 `http://localhost:8080/swagger-ui.html` 查看。
 
+## 联系我们
+
+### 作者微信
+
+![Dify4j架构图](docs/WeChat.png)
+
+### 微信交流群
+
+加群步骤
+
+1.Star项目
+2.扫作者微信二维码添加作者
+3.将Star的截图发给群主
+4.群主拉你进Star用户交流群
+
 ## 贡献指南
 
 我们欢迎任何形式的贡献，包括但不限于：
